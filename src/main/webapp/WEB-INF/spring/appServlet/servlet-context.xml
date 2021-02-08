@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: 서블릿 디스패쳐가 요청을 처리하는 구조속에서 필요한 빈을 선언하는 곳 -->
+	
+	<!-- 스프링의 @Controller 를 비롯한 다양한 애노테이션이 동작할 수 있도록 Enalble 해줌-->
+	<annotation-driven />
+
+	<!-- 웹앱루트/resources 로 오는 모든 요청을 /resources 경로로 연결해준다. -->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Controller들이 보내는 반환 String 으로 만들어질 View Resolver 셋팅 -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/view/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<!-- Controller, Repositorty, Service 등을 검색할 패키지 -->
+	<context:component-scan base-package="net.gondr.controller" />
+	
+	<!-- 인터셉터 등록하기 -->
+	<beans:bean id="authInter" class="net.gondr.interceptor.AuthInterceptor"></beans:bean>
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/user/info"/>
+			<mapping path="/board/**"/>
+			<exclude-mapping path="/board/list"/>
+			<exclude-mapping path="/board/view/*"/>
+			<beans:ref bean="authInter"/>
+			<!-- 
+				인터셉터 맵핑 규칙
+				* : 0개 또는 그 이상의 글자
+				** : 하위 폴더를 포함한 모든 폴더와 텍스트를 의미
+				? : 글자 한개
+			 -->
+		</interceptor>
+	</interceptors>
+	 
+</beans:beans>

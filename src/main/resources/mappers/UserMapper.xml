@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.gondr.mappers.UserMapper">
+	<insert id="insertUser">
+		INSERT INTO spring_users (userid, username, password) VALUES ( #{userid}, #{username}, #{password})
+	</insert>
+	
+	<select id="selectUser" resultType="net.gondr.domain.UserVO">
+		SELECT * FROM spring_users WHERE userid = #{userid}
+	</select>
+</mapper>
+
+
